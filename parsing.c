@@ -37,20 +37,19 @@ int main(int argc, char** argv) {
 	// Create some parsers
 	mpc_parser_t* Number = mpc_new("number");
 	mpc_parser_t* Operator = mpc_new("operator");
-	//mpc_parser_t* Text_Operator = mpc_new("text_operator");
+	mpc_parser_t* Text_Operator = mpc_new("text_operator");
 	mpc_parser_t* Expr = mpc_new("expr");
 	mpc_parser_t* Mexlisp = mpc_new("mexlisp");
 
 	mpca_lang(MPC_LANG_DEFAULT,
-	"															\
-		number   	  : /-?[0-9]+/ ; 							\
-		operator 	  : '+' | '-' | '*' | '/' | '\045';			\
-		expr     	  : <number> | '(' <operator> <expr>+ ')' ; \
-		mexlisp  	  : /^/ <operator> <expr>+ /$/ ;	    	\
+	"																				\
+		number   	  : /-?[0-9]+/ ; 												\
+		operator 	  : '+' | '-' | '*' | '/' | '\045';								\
+		text_operator : \"sum\" | \"res\" | \"mul\" | \"div\" | \"mod\"; 			\
+		expr     	  : <number> | '(' (<operator> | <text_operator>) <expr>+ ')' ; \
+		mexlisp  	  : /^/ (<operator> | <text_operator>) <expr>+ /$/ ;	    	\
 	",
-	Number, Operator, Expr, Mexlisp);
-
-	// text_operator : 'sum' | 'res' | 'mul' | 'div' | 'mod'   
+	Number, Operator, Text_Operator, Expr, Mexlisp);
 
 	while (1) {
 		// Get input and output it using editline
@@ -73,7 +72,7 @@ int main(int argc, char** argv) {
 	}
 
 	// Undefine and delete the parsers
-	mpc_cleanup(4, Number, Operator, Expr, Mexlisp);
+	mpc_cleanup(4, Number, Operator, Text_Operator, Expr, Mexlisp);
 
 	return 0;
 }
