@@ -1,0 +1,1 @@
+long eval_op(long, char*, long);

@@ -24,19 +24,11 @@ void add_history(char* unused) {}
 
 // Mac, Linux, etc.
 #include "libraries/readline.h"
+#include "brain.h"
 
 #endif
 
 static char* version_number = "0.1";
-
-// Use operator string to see which operation to perform
-long eval_op(long x, char* op, long y) {
-	if (strcmp(op, "+") == 0) { return x + y; }
-	if (strcmp(op, "-") == 0) { return x - y; }
-	if (strcmp(op, "*") == 0) { return x * y; }
-	if (strcmp(op, "/") == 0) { return x / y; }
-	return 0;
-}
 
 long eval(mpc_ast_t* t) {
 	// if number, return it directly
@@ -72,12 +64,12 @@ int main(int argc, char** argv) {
 	mpc_parser_t* Mexlisp = mpc_new("mexlisp");
 
 	mpca_lang(MPC_LANG_DEFAULT,
-	"																				\
-		number   	  : /-?[0-9]+(\\.[0-9][0-9]?)?/ ; 								\
-		operator 	  : '+' | '-' | '*' | '/' | '\045';								\
-		text_operator : \"sum\" | \"res\" | \"mul\" | \"div\" | \"mod\"; 			\
-		expr     	  : <number> | '(' (<operator> | <text_operator>) <expr>+ ')' ; \
-		mexlisp  	  : /^/ (<operator> | <text_operator>) <expr>+ /$/ ;	    	\
+	"																									\
+		number   	  : /-?[0-9]+(\\.[0-9][0-9]?)?/ ; 													\
+		operator 	  : '+' | '-' | '*' | '/' | '\045' | '^';											\
+		text_operator : \"sum\" | \"res\" | \"mul\" | \"div\" | \"mod\" | \"exp\" | \"min\" | \"max\" ; \
+		expr     	  : <number> | '(' (<operator> | <text_operator>) <expr>+ ')' ; 					\
+		mexlisp  	  : /^/ (<operator> | <text_operator>) <expr>+ /$/ ;	    						\
 	",
 	Number, Operator, Text_Operator, Expr, Mexlisp);
 
