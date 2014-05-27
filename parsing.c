@@ -53,8 +53,7 @@ long eval(mpc_ast_t* t) {
 
 int main(int argc, char** argv) {
 
-	printf("mexlisp version %s\n", version_number);
-	puts("¡A huevo!");
+	printf("Mexlisp versión %s\n", version_number);
 
 	// Create some parsers
 	mpc_parser_t* Number = mpc_new("number");
